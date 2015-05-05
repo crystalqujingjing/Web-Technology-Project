@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Homework4</title>
+<style type="text/css">
+    h1, form{
+        text-align:center;
+    }
+	p{
+	text-align:center;
+	font-size:20px;
+	}
+</style>
+<script>
+	function generateHTML(xmlDoc){
+		root=xmlDoc.documentElement;
+        if (root.childElementCount==0){
+            html_text="Error";
+            return;
+        }
+		html_text="<html><head>";
+		html_text+="<title>Real Estate Listings</title>";
+		html_text+="<style type='text/css'>table{text-align:center;}</style></head>";
+		listings=root.getElementsByTagName("Listing");
+        html_text+="<body><h1>Real Estate Listings</h1><table border='1'><tr><th colspan='7'>Listing</tr>";
+        for (i=0;i<listings.length;i++){
+			html_text+="<tr><td>Location</td>"
+            loc=listings[i].getElementsByTagName("Location")[0].childNodes;
+            for (j=0;j<loc.length;j++){
+                if (loc[j].nodeType==1){
+                    html_text+="<td>"+loc[j].nodeName+"</td>";
+                }
+            }
+			html_text+="</tr><tr><td>&nbsp;</td>";
+			for (j=0;j<loc.length;j++){
+                if (loc[j].nodeType==1){
+					text=loc[j].childNodes[0].nodeValue;
+                    html_text+="<td>"+text+"</td>";
+                }
+            }
+			html_text+="</tr><td>ListingDetails</td>";
+			
+			locdetails=listings[i].getElementsByTagName("ListingDetails")[0].childNodes;
+			for (j=0;j<locdetails.length;j++){
+                if (locdetails[j].nodeType==1){
+					if (locdetails[j].nodeName=="Image"){
+						html_text+="<td colspan='3'>"+locdetails[j].nodeName+"</td>";
+					}
+					else{
+                    html_text+="<td>"+locdetails[j].nodeName+"</td>";
+					}
+                }
+            }
+			html_text+="</tr><tr><td>&nbsp;</td>";
+			for (j=0;j<locdetails.length;j++){
+                if (locdetails[j].nodeType==1){
+					text=locdetails[j].childNodes[0].nodeValue;
+					if (locdetails[j].nodeName=="ListingUrl"){
+						html_text+="<td><a href='"+text+"'</a></td>";
+					}
+					else if (locdetails[j].nodeName=="Image"){
+						html_text+="<td colspan='3'><img src=\'"+text+"\'></td>";
+					}
+					else{
+						html_text+="<td>"+text+"</td>";
+					}
+                }
+            }
+        }
+        html_text+="</table>";
+		html_text+="</bo"+"dy>";
+		html_text+="</html>";
+	}
+	function loadXml(url) {
+		if (window.XMLHttpRequest)
+		{// code for IE7+, Firefox, Chrome, Opera, Safari
+		   xmlhttp=new XMLHttpRequest();   }
+		else {// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");  }
+		xmlhttp.open("GET",url,false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.responseXML;
+		return xmlDoc; 
+	}
+	
+	function viewXml(xmlUrl){
+		var url=xmlUrl.xml_url.value;
+        if (url.length == 0){ alert("Error: You need to enter an URL for the XML file.");
+            return;}
+		xmlDoc=loadXml(url);
+        if (xmlDoc.documentElement.nodeName=="parsererror"){
+            alert("Error in the XML file");
+            return;}
+		if (window.ActiveXObject){
+			if (xmlDoc.parseError.errorCode!=0){
+				alert("Error in the XML file");
+			}
+			else{xml2html(xmlDoc);
+				hWin=window.open("", "Real", "width=800, height=600");
+				hWin.document.write(html_text);
+			}
+		}
+		else{
+			xmlDoc.onload=generateHTML(xmlDoc);
+            if (html_text=="Error"){
+                alert("XML contains no listings");
+            }
+			else{
+                hWin=window.open("", "Real", "scrollbars=1, width=800, height=600");
+                hWin.document.write(html_text);
+            }
+		}
+        document.close();
+	}
+</script>
+</head>
+
+<body>
+<p>Enter URL for Real Estate Catalog XML File</p>
+<form method="post">
+	<input type="text" name="xml_url" size="40px" />
+	<br />
+	<input type="button" name="submit_query" value="Submit Query" onClick="viewXml(this.form)" />
+</form>
+<noscript>
+</body>
+</html>
