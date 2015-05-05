@@ -1,0 +1,49 @@
+.nav-tabs > li > a {
+    color: #FFF;
+    background-color: #EC971F;
+}
+
+.nav-tabs > li.active > a {
+    color: black;
+    background-color: white;
+}
+
+.nav-tabs > li > a:hover {
+    background-color: #F0AC4C;
+}
+
+.nav-tabs > li > a:visited {
+    background-color: #EC971F;
+}
+
+.has-error{
+   color:red;
+}
+
+div#zillowInfor{
+   visibility:hidden;
+}
+div#msg {
+    visibility: hidden;
+    text-align: center;
+    color:red;
+    font-size:17px;
+}
+
+.carousel-indicators > li.active {
+    background-color: #EC971F;
+}
+.carousel-indicators > li {
+    border: 1px solid #EC971F;
+}
+.carousel-caption {
+    text-align: left;
+    background-color: gray;
+    filter:alpha(opacity=65);
+    -moz-opacity:0.65;
+    opacity:0.65;
+    width: 100%;
+    left:0;
+    right:0;
+    bottom:0;
+}
